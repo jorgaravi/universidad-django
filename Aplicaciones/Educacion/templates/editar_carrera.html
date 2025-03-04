@@ -1,0 +1,67 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+{% block titulo %} 
+<title> Universidad Carreras</title>
+{% endblock titulo %} 
+
+{% block contenido %}
+<div class="container">
+  <h1 class="mt-5 text-center">Editar Carrera</h1>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Carrera</h1>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+         <form action="{% url 'procesar_editar_carrera' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="text" id="id_car" name="id_car" value="{{carrera.id_car}}" hidden>
+            <div class="mb-4">
+                <label for="" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre_car" name="nombre_car" value="{{carrera.nombre_car}}" placeholder="Sistemas de información" required >
+            </div>
+            <div class="mb-4">
+                <label for="" class="form-label">Fecha Creacion</label>
+                <input type="date" class="form-control" id="fecha_creacion_car" name="fecha_creacion_car"  value="{{carrera.fecha_creacion_car|date:'Y-m-d'}}" required >
+            </div>
+             <div class="mb-4">Telefono</label>
+                <input type="text" class="form-control" id="telefono_car" name="telefono_car" value="{{carrera.telefono_car}}" placeholder="Telefono" required >
+            </div>
+            <div class="mb-4">Logo Actual</label>
+              <br>
+              {% if carrera.logo_car %}
+                  <img src="{{carrera.logo_car.url}}" alt="" width="50">
+              {% else %}
+                  <p>S/N</p>
+              {% endif %}
+          </div>
+            
+            <div class="mb-4">
+              <label for="" class="form-label">logo</label>
+              <input type="file" class="form-control" id="logo_car" name="logo_car" accept="image/*">
+          </div>
+            <div class="modal-footer">
+                <a href="{% url 'carreras' %}"  type="button" class="btn bg-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Actualizar Carrera</button>
+            </div>
+         </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+<!-- fin Modal -->
+ <script>
+    const modal=document.getElementById("exampleModal")
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const myModal = new bootstrap.Modal(modal);
+        myModal.show();
+
+    });
+ </script>
+{% endblock contenido %}
