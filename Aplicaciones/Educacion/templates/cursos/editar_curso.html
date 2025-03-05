@@ -1,0 +1,58 @@
+{% extends 'plantilla.html' %}
+{% load static %}
+{% block titulo %} 
+<title> Universidad Cursos</title>
+{% endblock titulo %} 
+
+{% block contenido %}
+<div class="container">
+  <h1 class="mt-5 text-center">Editar Curso</h1>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Curso</h1>
+          <!-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> -->
+        </div>
+        <div class="modal-body">
+         <form action="{% url 'procesar_editar_curso' %}" method="post">
+            {% csrf_token %}
+            <input type="text" id="id_cur" name="id_cur" value="{{curso.id_cur}}" hidden>
+            <div class="mb-4">
+                <label for="" class="form-label">Nivel</label>
+                <input type="text" class="form-control" id="nivel_cur" name="nivel_cur" value="{{curso.nivel_cur}}" placeholder="Primero" required >
+            </div>
+            <div class="mb-4">
+                <label for="" class="form-label">Aula</label>
+                <input type="text" class="form-control" id="aula_cur" name="aula_cur"  value="{{curso.aula_cur}}" required >
+            </div>
+            <select class="form-control" name="fk_id_car" id="fk_id_car">
+                <option value="">--selecione una carrera--</option>
+                {% for carrera in carreras %}
+                 <option value="{{carrera.id_car}}">{{carrera.nombre_car}}</option>
+                {% endfor %}
+            </select>
+            <div class="modal-footer">
+                <a href="{% url 'cursos' %}"  type="button" class="btn bg-secondary">Cancelar</a>
+                <button type="submit" class="btn btn-primary">Actualizar Carrera</button>
+            </div>
+         </form>
+        </div>
+        
+      </div>
+    </div>
+</div>
+<!-- fin Modal -->
+ <script>
+    const modal=document.getElementById("exampleModal")
+    document.addEventListener('DOMContentLoaded', ()=>{
+        const myModal = new bootstrap.Modal(modal);
+        myModal.show();
+
+    });
+    document.getElementById("fk_id_car").value = "{{curso.fk_id_car.id_car}}"   
+ </script>
+{% endblock contenido %}

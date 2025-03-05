@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from ..models import Carrera
 from django.contrib import messages
-
+from django.db.models import ProtectedError
 # Create your views here.
 def inicio(request):
     return render(request, 'index.html')
@@ -24,11 +24,15 @@ def crear_carrera(request):
         return redirect('/carreras')
     
 def eliminar_carrera(request, id):
-    carreraDbb = Carrera.objects.get(id_car=id)
-    carreraDbb.delete()
-    messages.success(request, 'Carrera eliminada de la base de Datos')
-    return redirect('/carreras')
-
+    try:
+        carreraDbb = Carrera.objects.get(id_car=id)
+        carreraDbb.delete()
+        messages.success(request, 'Carrera eliminada de la base de Datos')
+        return redirect('/carreras')
+    except ProtectedError:
+        messages.error(request, "No se pudo borrar carrera porque existe datos relacionadas")
+    finally:
+         return redirect('/carreras')
 def editar_carrera(request, id):
     carreraDb = Carrera.objects.get(id_car=id)
     # carreraDbb.delete()
